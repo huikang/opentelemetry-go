@@ -49,7 +49,7 @@ func initProvider() func() {
 	// probably connect directly to the service through dns
 	exp, err := otlp.NewExporter(
 		otlp.WithInsecure(),
-		otlp.WithAddress("localhost:30080"),
+		otlp.WithAddress("localhost:55680"),
 		otlp.WithGRPCDialOption(grpc.WithBlock()), // useful for testing
 	)
 	handleErr(err, "failed to create exporter")
@@ -115,6 +115,10 @@ func main() {
 		"CollectorExporter-Example",
 		apitrace.WithAttributes(commonLabels...))
 	defer span.End()
+
+	spx := span.SpanContext()
+	log.Printf("root span_id: %s span_id: %s", spx.TraceID, spx.SpanID)
+
 	for i := 0; i < 10; i++ {
 		_, iSpan := tracer.Start(ctx, fmt.Sprintf("Sample-%d", i))
 		log.Printf("Doing really hard work (%d / 10)\n", i+1)
