@@ -4,13 +4,16 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"strings"
 	"time"
 
 	apitrace "go.opentelemetry.io/otel/api/trace"
-	coltracepb "go.opentelemetry.io/otel/exporters/otlp/internal/opentelemetry-proto-gen/collector/trace/v1"
-	"go.opentelemetry.io/otel/exporters/otlp/internal/transform"
+	"go.opentelemetry.io/otel/exporters/otlp"
+
+	// coltracepb "go.opentelemetry.io/otel/exporters/otlp/internal/opentelemetry-proto-gen/collector/trace/v1"
+	// "go.opentelemetry.io/otel/exporters/otlp/internal/transform"
 
 	"go.opentelemetry.io/otel/label"
 	export "go.opentelemetry.io/otel/sdk/export/trace"
@@ -18,6 +21,7 @@ import (
 	"go.opentelemetry.io/otel/sdk/resource"
 
 	_ "go.opentelemetry.io/otel/exporters/otlp/protocol/http"
+	// "go.opentelemetry.io/otel/exporters/otlp"
 )
 
 var payloadType = "protostr" // "raw"
@@ -106,7 +110,19 @@ func makePayload() string {
 	return str
 }
 
+func testHttpExporter() {
+	protocol, err := otlpprotocol.Open("mysql", "user:password@/dbname")
+
+	exp, err := otlp.NewExporter(otlp.WithInsecure(), otlp.WithProtocol())
+	if err != nil {
+		log.Fatalf("Failed to create the collector exporter: %v", err)
+	}
+}
+
 func main() {
+
+	testHttpExporter()
+
 	url := "http://52.117.168.146:55681/v1/trace"
 	method := "POST"
 

@@ -30,6 +30,7 @@ import (
 
 	"go.opentelemetry.io/otel/api/metric"
 	"go.opentelemetry.io/otel/exporters/otlp/internal/transform"
+	"go.opentelemetry.io/otel/exporters/otlp/protocol"
 	metricsdk "go.opentelemetry.io/otel/sdk/export/metric"
 	"go.opentelemetry.io/otel/sdk/export/metric/aggregation"
 	tracesdk "go.opentelemetry.io/otel/sdk/export/trace"
@@ -44,6 +45,7 @@ type Exporter struct {
 	traceExporter     coltracepb.TraceServiceClient
 	metricExporter    colmetricpb.MetricsServiceClient
 	grpcClientConn    *grpc.ClientConn
+	conn              protocol.ClientConn
 	lastConnectErrPtr unsafe.Pointer
 
 	startOnce      sync.Once

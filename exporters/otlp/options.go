@@ -94,6 +94,12 @@ func WithInsecure() ExporterOption {
 	}
 }
 
+func WithProtocol() ExporterOption {
+	return func(cfg *config) {
+		cfg.canDialInsecure = true
+	}
+}
+
 // WithAddress allows one to set the address that the exporter will
 // connect to the collector on. If unset, it will instead try to use
 // connect to DefaultCollectorHost:DefaultCollectorPort.
